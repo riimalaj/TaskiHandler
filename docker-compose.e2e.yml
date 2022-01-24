@@ -1,0 +1,55 @@
+version: "3.4"
+
+services:
+  api:
+    build: api
+    image: api
+    restart: unless-stopped
+    volumes:
+      - ./api:/app
+    ports:
+      - 4000:4000
+    depends_on:
+      - database
+    env_file:
+      - database.env
+
+  todos:
+    build: todos
+    image: todos
+    restart: unless-stopped
+    volumes:
+      - ./todos:/app
+    ports:
+      - 3000:3000
+    depends_on:
+      - database
+    env_file:
+      - database.env
+
+  database:
+    container_name: "postgres-todos-database"
+    image: "postgres:13.4"
+    restart: unless-stopped
+    env_file:
+        - database.env
+
+  flyway:
+    image: flyway/flyway:7.3.0-alpine
+    env_file:
+      - database.env
+    depends_on:
+      - database
+    volumes:
+      - .:/flyway/sql
+    command: -connectRetries=60 -baselineOnMigrate=true migrate
+
+  e2e-cypress:
+    build: e2e-cypress
+    image: e2e-cypress
+    volumes:
+      - ./e2e-cypress/:/app
+    environment:
+      - CYPRESS_baseUrl=http://todos:3000
+    depends_on:
+      - todos

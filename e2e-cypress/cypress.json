@@ -1,0 +1,6 @@
+{
+  "pluginsFile": false,
+  "supportFile": "cypress/support/index.js",
+  "video": false,
+  "screenshotOnRunFailure": false
+}
