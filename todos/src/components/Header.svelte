@@ -1,13 +1,14 @@
 <script>
-    const setText = () => {
-        if (document.getElementById("otsikko").innerHTML == "") {
-            document.getElementById("otsikko").innerHTML = "Hei";
-        } else {
-            document.getElementById("otsikko").innerHTML = "";
-        }
-    }
+    const haeMieteLause = async () => {
+        const lause = await fetch("http://localhost:4000/haeLause");
+        return lause.json();
+    };
+
+    const lause = haeMieteLause();
 </script>
 
-<h1 id="otsikko">Hei tehtävät</h1>
+<button on:click={haeMieteLause}>Hae mietelause</button>
 
-<button on:click={setText}>Aseta teksti</button>
+{#await lause then l}
+    {l.quote}
+{/await} 

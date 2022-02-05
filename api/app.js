@@ -6,6 +6,7 @@ const app = new Application();
 app.use(oakCors());
 
 app.use(middlewares.errorMiddleware);
+app.use(middlewares.userTokenMiddleware);
 app.use(routes);
 
 export { app };

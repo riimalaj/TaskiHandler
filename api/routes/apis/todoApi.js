@@ -1,15 +1,15 @@
 import * as todoService from "../../services/todoService.js";
 
-const listTodos = async ({ request, response }) => {
-  response.body = await todoService.findAll();
+const listTodos = async ({ token, request, response }) => {
+  response.body = await todoService.findAll(token);
 };
 
-const addTodo = async ({ request, response }) => {
+const addTodo = async ({ token, request, response }) => {
   const body = request.body({ type: "json" });
   const value = await body.value;
   const tehtava = value.tehtava;
 
-  await todoService.create(tehtava);
+  await todoService.create(tehtava, token);
 
   response.status = 200;
 };

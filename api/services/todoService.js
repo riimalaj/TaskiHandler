@@ -1,17 +1,16 @@
 import { executeQuery } from "../database/database.js";
 
-const findAll = async () => {
-  const res = await executeQuery(`SELECT * FROM todos ORDER BY id`);
-
+const findAll = async (token) => {
+  const res = await executeQuery(`SELECT * FROM todos WHERE user_token = $1 ORDER BY id`, token);
   return res.rows;
 };
 
-const create = async (description) => {
+const create = async (description, token) => {
   const res = await executeQuery(
-    `INSERT INTO todos (description) VALUES ($1)`,
-    description
+    `INSERT INTO todos (description, user_token) VALUES ($1, $2)`,
+    description,
+    token
   );
-
   return res.rows;
 };
 
